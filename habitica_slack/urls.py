@@ -15,10 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+
 import views
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^handle_slack_message$', views.handle_slack_message)
+    url(r'^handle_slack_message$', views.handle_slack_message),
+    url(r'^handle_habitica_message$', views.handle_habitica_message),
 ]
