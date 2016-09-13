@@ -17,6 +17,7 @@ def handle_slack_message(request):
         request.POST.get('text'))
         
     return HttpResponse('', status=200)
+
     
 def send_message(user, text):    
     api_user = os.environ['HABITICA_APIUSER']
