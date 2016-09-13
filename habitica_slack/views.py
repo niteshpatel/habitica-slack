@@ -6,14 +6,16 @@ import time
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
+from habitica_slack import models
+
 
 @csrf_exempt
-def handle_slack_message(request):
+def sync_message_to_habitica(request):
     token = request.POST.get('token')
     if token != os.environ['SLACK_TOKEN']:
         return HttpResponse('', status=401)
 
-    send_message(
+    send_message_to_habitica(
         request.POST.get('user_name'),
         request.POST.get('text'))
 
@@ -21,7 +23,7 @@ def handle_slack_message(request):
 
 
 @csrf_exempt
-def handle_habitica_message(request):
+def sync_messages_to_slack(request):
     from_timestamp = get_lastpost_timestamp()
     messages = get_messages_from_habitica()
     send_messages_to_slack(messages, from_timestamp)
@@ -29,7 +31,7 @@ def handle_habitica_message(request):
     return HttpResponse('', status=200)
 
 
-def send_message(user, text):
+def send_message_to_habitica(user, text):
     api_user = os.environ['HABITICA_APIUSER']
     api_key = os.environ['HABITICA_APIKEY']
     group_id = os.environ['HABITICA_GROUPID']
@@ -46,6 +48,23 @@ def send_message(user, text):
     }
 
     requests.post(habitica_url, headers=headers, data=data)
+
+
+def get_messages_from_habitica():
+    group_id = os.environ['HABITICA_GROUPID']
+
+    habitica_url = 'https://habitica.com/api/v3/groups/%s/chat' % group_id
+
+    api_user = os.environ['HABITICA_APIUSER']
+    api_key = os.environ['HABITICA_APIKEY']
+
+    headers = {
+        'x-api-user': api_user,
+        'x-api-key': api_key
+    }
+
+    response = requests.get(habitica_url, headers=headers)
+    return response.json()['data']
 
 
 def send_messages_to_slack(messages, from_timestamp):
@@ -88,11 +107,9 @@ def send_messages_to_slack(messages, from_timestamp):
 
 
 def get_lastpost_timestamp():
-    from habitica_slack.models import LastPostTimeStamp
-
-    last_post_time_stamp = LastPostTimeStamp.objects.first()
+    last_post_time_stamp = models.LastPostTimeStamp.objects.first()
     if not last_post_time_stamp:
-        last_post_time_stamp = LastPostTimeStamp()
+        last_post_time_stamp = models.LastPostTimeStamp()
 
         time_stamp = (int(time.time()) - (60 * 60 * 24)) * 1000
         last_post_time_stamp.time_stamp = time_stamp
@@ -102,27 +119,8 @@ def get_lastpost_timestamp():
 
 
 def set_lastpost_timestamp(time_stamp):
-    from habitica_slack.models import LastPostTimeStamp
+    models.LastPostTimeStamp.objects.all().delete()
 
-    LastPostTimeStamp.objects.all().delete()
-
-    last_post_time_stamp = LastPostTimeStamp()
+    last_post_time_stamp = models.LastPostTimeStamp()
     last_post_time_stamp.time_stamp = time_stamp
     last_post_time_stamp.save()
-
-
-def get_messages_from_habitica():
-    group_id = os.environ['HABITICA_GROUPID']
-
-    habitica_url = 'https://habitica.com/api/v3/groups/%s/chat' % group_id
-
-    api_user = os.environ['HABITICA_APIUSER']
-    api_key = os.environ['HABITICA_APIKEY']
-
-    headers = {
-        'x-api-user': api_user,
-        'x-api-key': api_key
-    }
-
-    response = requests.get(habitica_url, headers=headers)
-    return response.json()['data']

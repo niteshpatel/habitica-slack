@@ -20,6 +20,6 @@ import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^handle_slack_message$', views.handle_slack_message),
-    url(r'^handle_habitica_message$', views.handle_habitica_message),
+    url(r'^sync_message_to_habitica', views.sync_message_to_habitica),
+    url(r'^sync_messages_to_slack', views.sync_messages_to_slack),
 ]
