@@ -1,1 +1,1 @@
-web: gunicorn slack_to_habitica.wsgi
+web: python manage.py runserver 0.0.0.0:8888
