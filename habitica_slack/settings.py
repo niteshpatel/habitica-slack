@@ -1,5 +1,5 @@
 """
-Django settings for slack_to_habitica project on Heroku. Fore more info, see:
+Django settings for habitica_slack project on Heroku. Fore more info, see:
 https://github.com/heroku/heroku-django-template
 
 For more information on this file, see
@@ -53,7 +53,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'slack_to_habitica.urls'
+ROOT_URLCONF = 'habitica_slack.urls'
 
 TEMPLATES = [
     {
@@ -72,7 +72,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'slack_to_habitica.wsgi.application'
+WSGI_APPLICATION = 'habitica_slack.wsgi.application'
 
 
 # Database
