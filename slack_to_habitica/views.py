@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def handle_slack_message(request):
-    token = request.POST.get('token'):
+    token = request.POST.get('token')
     if token != os.environ['SLACK_TOKEN']:
         return HttpResponse(401)
         
