@@ -13,13 +13,13 @@
       },
       "HABITICA_APIUSER":{  
          "description":"Your Habitica User ID (found here https://habitica.com/#/options/settings/api)."
-      },      
+      },
       "HABITICA_APIKEY":{  
          "description":"Your Habitica API Token (found here https://habitica.com/#/options/settings/api)."
       },
       "HABITICA_GROUPID":{  
          "description":"Your Habitica Group ID (found here https://habitica.com/#/options/groups/party)."
-      }
+      },
       "SLACK_TOKEN":{  
          "description":"The authentication token from your slack integration."
       }
