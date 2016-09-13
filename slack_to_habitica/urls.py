@@ -20,5 +20,5 @@ import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^slack_message$', views.process_slack_message)
+    url(r'^handle_slack_message$', views.process_slack_message)
 ]

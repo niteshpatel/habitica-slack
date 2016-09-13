@@ -7,12 +7,16 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 @csrf_exempt
-def process_slack_message(request):
+def handle_slack_message(request):
+    token = request.POST.get('token'):
+    if token != os.environ['SLACK_TOKEN']:
+        return HttpResponse(401)
+        
     send_message(
         request.POST.get('user_name'), 
         request.POST.get('text'))
         
-    return HttpResponse()
+    return HttpResponse(200)
     
 def send_message(user, text):    
     api_user = os.environ['HABITICA_APIUSER']
