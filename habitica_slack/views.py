@@ -81,8 +81,7 @@ def send_messages_to_slack(messages, from_timestamp):
            ]
         }
         
-        print payload
-        #response = requests.post(slack_url, headers=headers, data=json.dumps(payload))
+        response = requests.post(slack_url, headers=headers, data=json.dumps(payload))
     
     if last_timestamp:
         set_lastpost_timestamp(last_timestamp)
