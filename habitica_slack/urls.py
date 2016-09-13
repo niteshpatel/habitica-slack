@@ -18,7 +18,6 @@ from django.contrib import admin
 
 import views
 
-
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^handle_slack_message$', views.handle_slack_message),
