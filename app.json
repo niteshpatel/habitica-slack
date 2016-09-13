@@ -1,0 +1,27 @@
+{  
+   "name":"habitica-slack",
+   "description":"Send and receive messages from a Habitica Party Chat to a Slack Channel",
+   "repository":"https://github.com/niteshpatel/habitica-slack",
+   "keywords":[  
+      "habitica",
+      "slack"
+   ],
+   "env":{  
+      "DJANGO_SECRETKEY":{  
+         "description":"A secret key for verifying the integrity of signed cookies.",
+         "generator":"secret"
+      },
+      "HABITICA_APIUSER":{  
+         "description":"Your Habitica User ID (found here https://habitica.com/#/options/settings/api)."
+      },      
+      "HABITICA_APIKEY":{  
+         "description":"Your Habitica API Token (found here https://habitica.com/#/options/settings/api)."
+      },
+      "HABITICA_GROUPID":{  
+         "description":"Your Habitica Group ID (found here https://habitica.com/#/options/groups/party)."
+      }
+      "SLACK_TOKEN":{  
+         "description":"The authentication token from your slack integration."
+      }
+   }
+}
