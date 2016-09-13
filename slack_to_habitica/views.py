@@ -27,7 +27,7 @@ def send_message(user, text):
     }    
     data = {
         'groupId': group_id,
-        'message': '<%s says> %s' % (user, text)
+        'message': '[%s says] %s' % (user, text)
     }
     
     response = requests.post(habitica_url, headers=headers, data=data)
