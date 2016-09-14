@@ -29,5 +29,8 @@
   },
   "addons": [
     "scheduler"
-  ]
+  ],
+  "scripts": {
+    "postdeploy": "bundle exec rake db:migrate"
+  }
 }
