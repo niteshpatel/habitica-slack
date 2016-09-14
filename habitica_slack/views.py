@@ -1,12 +1,13 @@
-import os
 import json
-import requests
+import os
 import time
 
+import requests
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from habitica_slack import models
+from habitica_slack import actions
 
 
 @csrf_exempt
@@ -24,9 +25,7 @@ def sync_message_to_habitica(request):
 
 @csrf_exempt
 def sync_messages_to_slack(request):
-    from_timestamp = get_lastpost_timestamp()
-    messages = get_messages_from_habitica()
-    send_messages_to_slack(messages, from_timestamp)
+    actions.sync_messages_to_slack()
 
     return HttpResponse('', status=200)
 
