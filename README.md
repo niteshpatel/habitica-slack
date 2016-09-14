@@ -5,9 +5,13 @@ Send and receive messages from a Habitica Party Chat to a Slack Channel
 
 ## Requirements
 
-As well as a Slack channel and a Habitica account, you need to set up an Outgoing WebHook in Slack (see https://slack.com/apps/manage/custom-integrations).  
+As well as a Slack channel and a Habitica account, you need to set up (see https://slack.com/apps/manage/custom-integrations):
+1. Outgoing WebHook in Slack to forward messages to Habitica
+1. Incoming WebHook in Slack to received messages from Habitica
 
-#### Integration Settings
+#### Outgoing WebHook Settings
 1. Channel: &lt;your-slack-channel&gt; e.g. #Habitica
 1. URL: &lt;heroku-app-url&gt;/sync_message_to_habitica e.g. https://myapp.herokuapp.test/sync_message_to_habitica
 
+#### Incoming WebHook Settings
+1. Post to Channel: &lt;your-slack-channel&gt; e.g. #Habitica
