@@ -26,5 +26,8 @@
     "SLACK_WEBHOOK": {
       "description": "Your Slack Incoming WebHook URL (found under your https://slack.com/apps/manage/custom-integrations)."
     }
-  }
+  },
+  "addons": [
+    "scheduler"
+  ]
 }
