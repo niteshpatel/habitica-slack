@@ -33,6 +33,9 @@ def get_lastpost_timestamp():
 
 
 def send_message_to_habitica(user, text):
+    if user.lower() == 'slackbot':
+        return
+
     api_user = os.environ['HABITICA_APIUSER']
     api_key = os.environ['HABITICA_APIKEY']
     group_id = os.environ['HABITICA_GROUPID']
