@@ -1,4 +1,4 @@
-# habitica-slack
+# habitica-slack [![StackShare](http://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](http://stackshare.io/niteshpatel/habitica-slack)
 Send and receive messages from a Habitica Party Chat to a Slack Channel
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/niteshpatel/habitica-slack)
