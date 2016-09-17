@@ -4,3 +4,4 @@ psycopg2==2.6.2
 whitenoise==3.2
 requests==2.10
 requests-mock==1.1.0
+mock==2.0.0
