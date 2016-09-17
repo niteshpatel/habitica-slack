@@ -5,11 +5,11 @@ python:
 
 env:
   - DJANGO=1.10.1
-  - DJANGO_SECRETKEY=secret
 
 install:
   - pip install -r requirements.txt
   - pip install -q Django==$DJANGO
 
 script:
+  - export DJANGO_SECRETKEY=secret
   - python manage.py test
