@@ -13,7 +13,7 @@ install:
 
 script:
   - export DJANGO_SECRETKEY=secret
-  - coverage run --source=habitica-slack manage.py test
+  - coverage run --source=habitica_slack manage.py test
 
 after_success:
   - coveralls
