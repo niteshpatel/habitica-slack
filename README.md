@@ -1,5 +1,5 @@
 # habitica-slack [![Code Climate](https://img.shields.io/codeclimate/github/niteshpatel/habitica-slack.svg?maxAge=2592000)](https://codeclimate.com/github/niteshpatel/habitica-slack) [![License](https://img.shields.io/github/license/niteshpatel/habitica-slack.svg?maxAge=2592000)](https://raw.githubusercontent.com/niteshpatel/habitica-slack/master/LICENSE.txt) [![StackShare](http://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](http://stackshare.io/niteshpatel/habitica-slack)
-[Habitica extension](http://habitica.wikia.com/wiki/Slack_Chat_Integration) to send and receive messages from a Habitica Party Chat to a Slack Channel.  
+[Habitica extension](http://habitica.wikia.com/wiki/Slack_Chat_Integration) to send and receive messages from a Habitica Group Chat to a Slack Channel.  
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/niteshpatel/habitica-slack)
 
