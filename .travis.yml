@@ -8,7 +8,6 @@ env:
 
 install:
 - pip install -r requirements.txt
-- pip install coveralls
 - pip install codeclimate-test-reporter
 - pip install -q Django==$DJANGO
 
@@ -18,6 +17,3 @@ script:
 
 after_script:
 - codeclimate-test-reporter --file .coverage
-
-after_success:
-- coveralls
