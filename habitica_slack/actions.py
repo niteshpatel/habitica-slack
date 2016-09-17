@@ -84,30 +84,35 @@ def send_messages_to_slack(messages, from_timestamp):
         if m['text'].startswith('['):
             continue
 
-        user = m.get('user')
-
         headers = {
             'content-type': 'application/json'
         }
-        payload = {
-            'attachments': [
-                {
-                    'fallback': (user and (user + ': ') or '') + m['text'],
-                    'color': user and 'good' or 'danger',
-                    'fields': [
-                        {
-                            'title': user,
-                            'value': m['text']
-                        }
-                    ]
-                }
-            ]
-        }
+
+        payload = build_payload(m, m.get('user'))
 
         requests.post(slack_url, headers=headers, data=json.dumps(payload))
 
     if last_timestamp:
         set_lastpost_timestamp(last_timestamp)
+
+
+def build_payload(m, user):
+    payload = {
+        'attachments': [
+            {
+                'fallback': (user and (user + ': ') or '') + m['text'],
+                'color': user and 'good' or 'danger',
+                'fields': [
+                    {
+                        'title': user,
+                        'value': m['text']
+                    }
+                ]
+            }
+        ]
+    }
+
+    return payload
 
 
 def get_timestamp_one_hour_ago():
