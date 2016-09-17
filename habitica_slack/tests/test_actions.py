@@ -211,6 +211,7 @@ class ActionsTestCase(TestCase):
             self.assertDictContainsSubset(expected_headers, request.headers)
             self.assertEquals(json.loads(request.body), expected_post_bodies[i])
 
+    # noinspection PyMethodMayBeStatic
     def test_sync_messages_to_slack(self):
         # arrange
         expected_timestamp = 3
