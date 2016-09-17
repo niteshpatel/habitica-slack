@@ -1,10 +1,15 @@
 language: python
+
 python:
   - "2.7"
+
 env:
   - DJANGO=1.10.1
+  - DJANGO_SECRETKEY=secret
+
 install:
   - pip install -r requirements.txt
   - pip install -q Django==$DJANGO
+
 script:
   - python manage.py test
