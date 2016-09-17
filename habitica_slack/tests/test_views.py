@@ -17,7 +17,7 @@ class ViewsTestCase(TestCase):
         user_name = 'Joe'
         text = 'Hello'
 
-        dummy_request = self.create_dummy_post_request()
+        dummy_request = create_dummy_post_request()
         dummy_request.POST = {
             'token': self.slackToken,
             'user_name': user_name,
@@ -37,7 +37,7 @@ class ViewsTestCase(TestCase):
 
     def test_sync_message_to_habitica_with_invalid_token(self):
         # arrange
-        dummy_request = self.create_dummy_post_request()
+        dummy_request = create_dummy_post_request()
         dummy_request.POST = {}
         views.actions.send_message_to_habitica = mock.Mock(return_value=None)
 
@@ -52,7 +52,7 @@ class ViewsTestCase(TestCase):
 
     def test_sync_messages_to_slack(self):
         # arrange
-        dummy_request = self.create_dummy_post_request()
+        dummy_request = create_dummy_post_request()
         views.actions.sync_messages_to_slack = mock.Mock(return_value=None)
 
         # act
@@ -64,8 +64,9 @@ class ViewsTestCase(TestCase):
         self.assertEquals(response.content, '')
         self.assertEquals(response.status_code, 200)
 
-    def create_dummy_post_request(self):
-        dummy_request = type('', (), {})()
-        dummy_request.POST = {}
 
-        return dummy_request
+def create_dummy_post_request():
+    dummy_request = type('', (), {})()
+    dummy_request.POST = {}
+
+    return dummy_request
