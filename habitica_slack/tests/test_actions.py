@@ -1,8 +1,7 @@
 import json
 import os
-import time
-import mock
 
+import mock
 import requests_mock
 from django.test import TestCase
 
@@ -23,7 +22,7 @@ class ActionsTestCase(TestCase):
 
     def test_get_default_lastpost_timestamp(self):
         # arrange
-        now_timestamp = (int(time.time()) - (60 * 60 * 24)) * 1000
+        now_timestamp = actions.get_timestamp_one_hour_ago()
 
         # act
         last_post_timestamp = actions.get_lastpost_timestamp()

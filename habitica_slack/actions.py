@@ -25,7 +25,7 @@ def get_lastpost_timestamp():
     if not last_post_time_stamp:
         last_post_time_stamp = models.LastPostTimeStamp()
 
-        time_stamp = (int(time.time()) - (60 * 60 * 24)) * 1000
+        time_stamp = get_timestamp_one_hour_ago()
         last_post_time_stamp.time_stamp = time_stamp
         last_post_time_stamp.save()
 
@@ -108,3 +108,7 @@ def send_messages_to_slack(messages, from_timestamp):
 
     if last_timestamp:
         set_lastpost_timestamp(last_timestamp)
+
+
+def get_timestamp_one_hour_ago():
+    return (int(time.time()) - (60 * 60 * 24)) * 1000
