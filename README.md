@@ -6,7 +6,7 @@ Send and receive messages from a Habitica Party Chat to a Slack Channel
 ## Requirements
 
 ### Slack Integrations
-As well as a Slack channel and a Habitica account, you need to set up (see https://slack.com/apps/manage/custom-integrations):
+As well as a Slack channel and a Habitica account, you need to [set up custom integrations in Slack](https://slack.com/apps/manage/custom-integrations):
 
 1. Outgoing WebHook in Slack to forward messages to Habitica
 1. Incoming WebHook in Slack to received messages from Habitica
