@@ -20,4 +20,5 @@ ratings:
   - "**.php"
   - "**.py"
   - "**.rb"
-exclude_paths: []
+exclude_paths:
+- "habitica_slack/wsgi.py"
