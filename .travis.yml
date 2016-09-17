@@ -1,19 +1,23 @@
 language: python
 
 python:
-  - "2.7"
+- "2.7"
 
 env:
-  - DJANGO=1.10.1
+- DJANGO=1.10.1
 
 install:
-  - pip install -r requirements.txt
-  - pip install coveralls
-  - pip install -q Django==$DJANGO
+- pip install -r requirements.txt
+- pip install coveralls
+- pip install codeclimate-test-reporter
+- pip install -q Django==$DJANGO
 
 script:
-  - export DJANGO_SECRETKEY=secret
-  - coverage run --source=habitica_slack manage.py test
+- export DJANGO_SECRETKEY=secret
+- coverage run --source=habitica_slack manage.py test
+
+after_script:
+- codeclimate-test-reporter --file .coverage
 
 after_success:
-  - coveralls
+- coveralls
