@@ -8,8 +8,12 @@ env:
 
 install:
   - pip install -r requirements.txt
+  - pip install coveralls
   - pip install -q Django==$DJANGO
 
 script:
   - export DJANGO_SECRETKEY=secret
-  - python manage.py test
+  - coverage run --source=habitica-slack manage.py test
+
+after_success:
+  - coveralls
