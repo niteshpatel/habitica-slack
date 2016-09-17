@@ -43,7 +43,7 @@ class ActionsTestCase(TestCase):
         self.assertEquals(last_post_timestamp, timestamp)
 
     @requests_mock.mock()
-    def test_send_message_to_habitica(self, m):
+    def test_send_message_to_habitica_from_user(self, m):
         # arrange
         data = {
             'user': 'Joe',
@@ -73,6 +73,23 @@ class ActionsTestCase(TestCase):
         self.assertEquals(request.method, 'POST')
         self.assertDictContainsSubset(expected_headers, request.headers)
         self.assertEquals(request.body, expected_body)
+
+    @requests_mock.mock()
+    def test_send_message_to_habitica_from_slackbot_does_nothing(self, m):
+        # arrange
+        data = {
+            'user': 'slackbot',
+            'text': 'Hello!'
+        }
+
+        m.post(requests_mock.ANY)
+
+        # act
+        actions.send_message_to_habitica(data['user'], data['text'])
+
+        # assert
+        history = m.request_history
+        self.assertEquals(len(history), 0)
 
     @requests_mock.mock()
     def test_get_messages_from_habitica(self, m):
