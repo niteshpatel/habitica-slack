@@ -32,8 +32,8 @@ class ViewsTestCase(TestCase):
         # assert
         # noinspection PyUnresolvedReferences
         views.actions.send_message_to_habitica.assert_called_with(user_name, text)
-        self.assertEquals(response.content, '')
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.content, '')
+        self.assertEqual(response.status_code, 200)
 
     def test_sync_message_to_habitica_with_invalid_token(self):
         # arrange
@@ -47,8 +47,8 @@ class ViewsTestCase(TestCase):
         # assert
         # noinspection PyUnresolvedReferences
         views.actions.send_message_to_habitica.assert_not_called()
-        self.assertEquals(response.content, '')
-        self.assertEquals(response.status_code, 401)
+        self.assertEqual(response.content, '')
+        self.assertEqual(response.status_code, 401)
 
     def test_sync_messages_to_slack(self):
         # arrange
@@ -61,8 +61,8 @@ class ViewsTestCase(TestCase):
         # assert
         # noinspection PyUnresolvedReferences
         views.actions.sync_messages_to_slack.assert_called_with()
-        self.assertEquals(response.content, '')
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.content, '')
+        self.assertEqual(response.status_code, 200)
 
 
 def create_dummy_post_request():

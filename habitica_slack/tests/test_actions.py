@@ -28,7 +28,7 @@ class ActionsTestCase(TestCase):
         last_post_timestamp = actions.get_lastpost_timestamp()
 
         # assert
-        self.assertEquals(last_post_timestamp, now_timestamp)
+        self.assertEqual(last_post_timestamp, now_timestamp)
 
     def test_set_lastpost_timestamp(self):
         # arrange
@@ -39,7 +39,7 @@ class ActionsTestCase(TestCase):
 
         # assert
         last_post_timestamp = actions.get_lastpost_timestamp()
-        self.assertEquals(last_post_timestamp, timestamp)
+        self.assertEqual(last_post_timestamp, timestamp)
 
     @requests_mock.mock()
     def test_send_message_to_habitica_from_user(self, m):
@@ -65,13 +65,13 @@ class ActionsTestCase(TestCase):
 
         # assert
         history = m.request_history
-        self.assertEquals(len(history), 1)
+        self.assertEqual(len(history), 1)
 
         request = history[0]
-        self.assertEquals(request.url, expected_url)
-        self.assertEquals(request.method, 'POST')
+        self.assertEqual(request.url, expected_url)
+        self.assertEqual(request.method, 'POST')
         self.assertDictContainsSubset(expected_headers, request.headers)
-        self.assertEquals(request.body, expected_body)
+        self.assertEqual(request.body, expected_body)
 
     @requests_mock.mock()
     def test_send_message_to_habitica_from_slackbot_does_nothing(self, m):
@@ -88,7 +88,7 @@ class ActionsTestCase(TestCase):
 
         # assert
         history = m.request_history
-        self.assertEquals(len(history), 0)
+        self.assertEqual(len(history), 0)
 
     @requests_mock.mock()
     def test_get_messages_from_habitica(self, m):
@@ -107,14 +107,14 @@ class ActionsTestCase(TestCase):
 
         # assert
         history = m.request_history
-        self.assertEquals(len(history), 1)
+        self.assertEqual(len(history), 1)
 
         request = history[0]
-        self.assertEquals(request.url, expected_url)
-        self.assertEquals(request.method, 'GET')
+        self.assertEqual(request.url, expected_url)
+        self.assertEqual(request.method, 'GET')
         self.assertDictContainsSubset(expected_headers, request.headers)
-        self.assertEquals(request.body, None)
-        self.assertEquals(response, 'dummy_data')
+        self.assertEqual(request.body, None)
+        self.assertEqual(response, 'dummy_data')
 
     @requests_mock.mock()
     def test_send_messages_to_slack(self, m):
@@ -201,14 +201,14 @@ class ActionsTestCase(TestCase):
         # assert
         history = m.request_history
         len_history = len(history)
-        self.assertEquals(len_history, 3)
+        self.assertEqual(len_history, 3)
 
         for i in range(len_history):
             request = history[i]
-            self.assertEquals(request.url, self.slackWebhook)
-            self.assertEquals(request.method, 'POST')
+            self.assertEqual(request.url, self.slackWebhook)
+            self.assertEqual(request.method, 'POST')
             self.assertDictContainsSubset(expected_headers, request.headers)
-            self.assertEquals(json.loads(request.body), expected_post_bodies[i])
+            self.assertEqual(json.loads(request.body), expected_post_bodies[i])
 
     # noinspection PyMethodMayBeStatic
     def test_sync_messages_to_slack(self):
