@@ -24,3 +24,9 @@ def sync_messages_to_slack(request):
     actions.sync_messages_to_slack()
 
     return HttpResponse('', status=200)
+
+
+def setup_habitica_webhook(request):
+    actions.setup_habitica_webhook(request.build_absolute_uri())
+
+    return HttpResponse('', status=200)

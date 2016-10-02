@@ -226,3 +226,68 @@ class ActionsTestCase(TestCase):
         # assert
         # noinspection PyUnresolvedReferences
         actions.send_messages_to_slack.assert_called_with(expected_messages, expected_timestamp)
+
+    @requests_mock.mock()
+    def test_setup_habitica_webhook_checks_for_existing_webhook(self, m):
+        # arrange
+        expected_headers = {
+            'x-api-user': self.apiUser,
+            'x-api-key': self.apiKey
+        }
+
+        expected_url = 'https://habitica.com/api/v3/user/webhook/123'
+
+        m.put(requests_mock.ANY, text=json.dumps({'success': True}))
+
+        # act
+        response = actions.setup_habitica_webhook('http://example.test')
+
+        # assert
+        history = m.request_history
+        self.assertEqual(len(history), 1)
+
+        request = history[0]
+        self.assertEqual(request.url, expected_url)
+        self.assertEqual(request.method, 'PUT')
+        self.assertDictContainsSubset(expected_headers, request.headers)
+        self.assertEqual(request.body, None)
+        self.assertEqual(response, {'success': True})
+
+    @requests_mock.mock()
+    def test_setup_habitica_webhook_creates_webhook_if_not_present(self, m):
+        # arrange
+        expected_headers = {
+            'x-api-user': self.apiUser,
+            'x-api-key': self.apiKey,
+            'content-type': 'application/json'
+        }
+
+        expected_body = {
+            'id': '123',
+            'enabled': True,
+            'url': 'http://example.test/sync_messages_to_slack',
+            'label': 'sync_messages_to_slack',
+            'type': 'groupChatReceived',
+            'options': {
+                'groupId': '123'
+            }
+        }
+
+        expected_url = 'https://habitica.com/api/v3/user/webhook/123'
+
+        m.put(requests_mock.ANY, text=json.dumps({'success': False, 'error': 'NotFound'}))
+        m.post(requests_mock.ANY, text=json.dumps({'success': True}))
+
+        # act
+        response = actions.setup_habitica_webhook('http://example.test')
+
+        # assert
+        history = m.request_history
+        self.assertEqual(len(history), 2)
+
+        request = history[1]
+        self.assertEqual(request.url, expected_url)
+        self.assertEqual(request.method, 'POST')
+        self.assertDictContainsSubset(expected_headers, request.headers)
+        self.assertEqual(request.body, json.dumps(expected_body))
+        self.assertEqual(response, {'success': True})

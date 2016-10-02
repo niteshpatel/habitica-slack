@@ -96,6 +96,41 @@ def send_messages_to_slack(messages, from_timestamp):
         set_lastpost_timestamp(last_timestamp)
 
 
+def setup_habitica_webhook(url_host):
+    group_id = os.environ['HABITICA_GROUPID']
+
+    habitica_url = 'https://habitica.com/api/v3/user/webhook/%s' % group_id
+
+    api_user = os.environ['HABITICA_APIUSER']
+    api_key = os.environ['HABITICA_APIKEY']
+
+    headers = {
+        'x-api-user': api_user,
+        'x-api-key': api_key,
+        'content-type': 'application/json'
+    }
+
+    response = requests.put(habitica_url, headers=headers)
+    data = response.json()
+
+    if data['success'] == False and data['error'] == 'NotFound':
+        data = {
+            'id': os.environ['HABITICA_GROUPID'],
+            'enabled': True,
+            'url': '%s/sync_messages_to_slack' % url_host,
+            'label': 'sync_messages_to_slack',
+            'type': 'groupChatReceived',
+            'options': {
+                'groupId': os.environ['HABITICA_GROUPID']
+            }
+        }
+
+        response = requests.post(habitica_url, headers=headers, json=data)
+        return response.json()
+
+    return data
+
+
 def build_payload(m, user):
     payload = {
         'attachments': [

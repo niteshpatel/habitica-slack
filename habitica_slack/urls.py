@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^sync_message_to_habitica', views.sync_message_to_habitica),
     url(r'^sync_messages_to_slack', views.sync_messages_to_slack),
+    url(r'^setup_habitica_webhook', views.setup_habitica_webhook),
 ]

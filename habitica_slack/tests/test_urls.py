@@ -16,3 +16,10 @@ class UrlsTestCase(TestCase):
 
         # assert
         self.assertEqual(resolver.view_name, 'habitica_slack.views.sync_messages_to_slack')
+
+    def test_setup_habitica_webhook_url(self):
+        # act
+        resolver = resolve('/setup_habitica_webhook')
+
+        # assert
+        self.assertEqual(resolver.view_name, 'habitica_slack.views.setup_habitica_webhook')
