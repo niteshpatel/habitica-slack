@@ -114,10 +114,12 @@ def setup_habitica_webhook(url_host):
     data = response.json()
 
     if data['success'] == False and data['error'] == 'NotFound':
+        habitica_url = 'https://habitica.com/api/v3/user/webhook'
+
         data = {
             'id': os.environ['HABITICA_GROUPID'],
             'enabled': True,
-            'url': '%s/sync_messages_to_slack' % url_host,
+            'url': '%ssync_messages_to_slack' % url_host,
             'label': 'sync_messages_to_slack',
             'type': 'groupChatReceived',
             'options': {

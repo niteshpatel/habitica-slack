@@ -67,7 +67,7 @@ class ViewsTestCase(TestCase):
     def test_setup_habitica_webhook(self):
         # arrange
         dummy_request = create_dummy_post_request()
-        views.actions.setup_habitica_webhook = mock.Mock(return_value=None)
+        views.actions.setup_habitica_webhook = mock.Mock(return_value={'success': True})
 
         # act
         response = views.setup_habitica_webhook(dummy_request)
@@ -75,13 +75,13 @@ class ViewsTestCase(TestCase):
         # assert
         # noinspection PyUnresolvedReferences
         views.actions.setup_habitica_webhook.assert_called_with(None)
-        self.assertEqual(response.content, '')
+        self.assertEqual(response.content, 'success')
         self.assertEqual(response.status_code, 200)
 
 
 def create_dummy_post_request():
     dummy_request = type('', (), {})()
     dummy_request.POST = {}
-    dummy_request.build_absolute_uri = lambda: None
+    dummy_request.build_absolute_uri = lambda path: None
 
     return dummy_request

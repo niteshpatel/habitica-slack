@@ -273,13 +273,13 @@ class ActionsTestCase(TestCase):
             }
         }
 
-        expected_url = 'https://habitica.com/api/v3/user/webhook/123'
+        expected_url = 'https://habitica.com/api/v3/user/webhook'
 
         m.put(requests_mock.ANY, text=json.dumps({'success': False, 'error': 'NotFound'}))
         m.post(requests_mock.ANY, text=json.dumps({'success': True}))
 
         # act
-        response = actions.setup_habitica_webhook('http://example.test')
+        response = actions.setup_habitica_webhook('http://example.test/')
 
         # assert
         history = m.request_history
