@@ -18,7 +18,10 @@ As well as a Slack channel and a Habitica account, you need to [set up custom in
 #### Incoming WebHook Settings
 1. Post to Channel: &lt;your-slack-channel&gt; e.g. #Habitica
 
-### Heroku Configuration
+### Setup Habitica WebHook
+1. Visit &lt;heroku-app-url&gt;/setup_habitica_webhook to setup the Habitica webhook
+
+### Heroku Configuration (optional if Habitica WebHook above is not working)
 Not everything in the Heroku setup can be automated with the Deploy button.  You will need to add the command for the scheduler manually.
 
 1. Browse to https://scheduler.heroku.com/dashboard
