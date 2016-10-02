@@ -237,7 +237,7 @@ class ActionsTestCase(TestCase):
 
         expected_url = 'https://habitica.com/api/v3/user/webhook/123'
 
-        m.put(requests_mock.ANY, text=json.dumps({'success': True}))
+        m.put(requests_mock.ANY, text=json.dumps({'success': True}), status_code=200, reason='OK')
 
         # act
         response = actions.setup_habitica_webhook('http://example.test')
@@ -251,7 +251,7 @@ class ActionsTestCase(TestCase):
         self.assertEqual(request.method, 'PUT')
         self.assertDictContainsSubset(expected_headers, request.headers)
         self.assertEqual(request.body, None)
-        self.assertEqual(response, {'success': True})
+        self.assertEqual(response, (200, 'OK'))
 
     @requests_mock.mock()
     def test_setup_habitica_webhook_creates_webhook_if_not_present(self, m):
@@ -276,7 +276,7 @@ class ActionsTestCase(TestCase):
         expected_url = 'https://habitica.com/api/v3/user/webhook'
 
         m.put(requests_mock.ANY, text=json.dumps({'success': False, 'error': 'NotFound'}))
-        m.post(requests_mock.ANY, text=json.dumps({'success': True}))
+        m.post(requests_mock.ANY, text=json.dumps({'success': True}), status_code=201, reason='Created')
 
         # act
         response = actions.setup_habitica_webhook('http://example.test/')
@@ -290,4 +290,4 @@ class ActionsTestCase(TestCase):
         self.assertEqual(request.method, 'POST')
         self.assertDictContainsSubset(expected_headers, request.headers)
         self.assertEqual(request.body, json.dumps(expected_body))
-        self.assertEqual(response, {'success': True})
+        self.assertEqual(response, (201, 'Created'))

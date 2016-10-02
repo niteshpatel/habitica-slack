@@ -128,9 +128,8 @@ def setup_habitica_webhook(url_host):
         }
 
         response = requests.post(habitica_url, headers=headers, json=data)
-        return response.json()
 
-    return data
+    return (response.status_code, response.reason)
 
 
 def build_payload(m, user):

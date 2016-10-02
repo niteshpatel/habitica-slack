@@ -27,6 +27,6 @@ def sync_messages_to_slack(request):
 
 
 def setup_habitica_webhook(request):
-    response = actions.setup_habitica_webhook(request.build_absolute_uri('/'))
+    status_code, reason_phrase = actions.setup_habitica_webhook(request.build_absolute_uri('/'))
 
-    return HttpResponse(response['success'] and 'success', status=200)
+    return HttpResponse(reason_phrase, status=status_code)
