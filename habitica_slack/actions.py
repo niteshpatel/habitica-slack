@@ -51,7 +51,7 @@ def send_message_to_habitica(user, text):
         'x-api-key': api_key
     }
 
-    prefix = single_user and '' or '[%s says] ' % user
+    prefix = '' if single_user else '[%s says] ' % user
     data = {
         'groupId': group_id,
         'message': '%s%s' % (prefix, text)
