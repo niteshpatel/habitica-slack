@@ -113,7 +113,7 @@ def setup_habitica_webhook(url_host):
     response = requests.put(habitica_url, headers=headers)
     data = response.json()
 
-    if data['success'] == False and data['error'] == 'NotFound':
+    if data['success'] is False and data['error'] == 'NotFound':
         habitica_url = 'https://habitica.com/api/v3/user/webhook'
 
         data = {
@@ -129,7 +129,7 @@ def setup_habitica_webhook(url_host):
 
         response = requests.post(habitica_url, headers=headers, json=data)
 
-    return (response.status_code, response.reason)
+    return response.status_code, response.reason
 
 
 def build_payload(m, user):
