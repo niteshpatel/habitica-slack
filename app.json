@@ -25,6 +25,10 @@
     },
     "SLACK_WEBHOOK": {
       "description": "Your Slack Incoming WebHook URL (found under your https://slack.com/apps/manage/custom-integrations)."
+    },
+    "SINGLE_USER": {
+      "description": "Only allow messages to be sent from this Slack user.  If this is blank, then any user can send messages, and the message will be prefixed by their name.",
+      "required": false
     }
   },
   "addons": [

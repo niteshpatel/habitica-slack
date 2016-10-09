@@ -91,6 +91,28 @@ class ActionsTestCase(TestCase):
         self.assertEqual(len(history), 0)
 
     @requests_mock.mock()
+    def test_send_message_to_habitica_from_other_user_when_in_single_user_mode_does_nothing(self, m):
+        # arrange
+        os.environ['SINGLE_USER'] = 'me'
+
+        data = {
+            'user': 'someone else',
+            'text': 'Hello!'
+        }
+
+        m.post(requests_mock.ANY)
+
+        # act
+        actions.send_message_to_habitica(data['user'], data['text'])
+
+        # assert
+        history = m.request_history
+        self.assertEqual(len(history), 0)
+
+        # teardown
+        del os.environ['SINGLE_USER']
+
+    @requests_mock.mock()
     def test_get_messages_from_habitica(self, m):
         # arrange
         expected_headers = {

@@ -36,6 +36,10 @@ def send_message_to_habitica(user, text):
     if user.lower() == 'slackbot':
         return
 
+    single_user = os.environ.get('SINGLE_USER')
+    if single_user and single_user.lower() != user.lower():
+        return
+
     api_user = os.environ['HABITICA_APIUSER']
     api_key = os.environ['HABITICA_APIKEY']
     group_id = os.environ['HABITICA_GROUPID']
@@ -46,9 +50,11 @@ def send_message_to_habitica(user, text):
         'x-api-user': api_user,
         'x-api-key': api_key
     }
+
+    prefix = single_user and '' or '[%s says] ' % user
     data = {
         'groupId': group_id,
-        'message': '[%s says] %s' % (user, text)
+        'message': '%s%s' % (prefix, text)
     }
 
     requests.post(habitica_url, headers=headers, data=data)
