@@ -141,6 +141,8 @@ class ActionsTestCase(TestCase):
     @requests_mock.mock()
     def test_send_messages_to_slack(self, m):
         # arrange
+        os.environ['HABITICA_USERNAME'] = 'Karthik'
+
         messages = [
             {
                 'timestamp': 10,
@@ -164,6 +166,11 @@ class ActionsTestCase(TestCase):
                 'timestamp': 50,
                 'text': 'hello from Emily',
                 'user': 'Emily'
+            },
+            {
+                'timestamp': 60,
+                'text': 'hello from Karthik',
+                'user': 'Karthik'
             }
         ]
 
@@ -231,6 +238,9 @@ class ActionsTestCase(TestCase):
             self.assertEqual(request.method, 'POST')
             self.assertDictContainsSubset(expected_headers, request.headers)
             self.assertEqual(json.loads(request.body), expected_post_bodies[i])
+
+        # teardown
+        del os.environ['HABITICA_USERNAME']
 
     # noinspection PyMethodMayBeStatic
     def test_sync_messages_to_slack(self):

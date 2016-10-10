@@ -87,7 +87,9 @@ def send_messages_to_slack(messages, from_timestamp):
 
         last_timestamp = m['timestamp']
 
-        if m['text'].startswith('['):
+        user = m.get('user')
+        is_from_me = True if user and user == os.environ.get('HABITICA_USERNAME') else False
+        if m['text'].startswith('[') or is_from_me:
             continue
 
         headers = {
