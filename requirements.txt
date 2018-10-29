@@ -2,6 +2,6 @@ dj-database-url==0.4.1
 Django==1.9.8
 psycopg2==2.6.2
 whitenoise==3.2
-requests==2.10
+requests==2.20
 requests-mock==1.1.0
 mock==2.0.0
