@@ -4,8 +4,9 @@ python:
 - "2.7"
 
 env:
-- DJANGO=1.10.1
-- CC_TEST_REPORTER_ID=c58f68be8b3bdb0ce6b42fe37093649753c32d4fbd49f2236c17702da6f70056
+  global:
+    - DJANGO=1.10.1
+    - CC_TEST_REPORTER_ID=c58f68be8b3bdb0ce6b42fe37093649753c32d4fbd49f2236c17702da6f70056
 
 install:
 - pip install -r requirements.txt
