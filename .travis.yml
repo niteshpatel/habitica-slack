@@ -21,6 +21,7 @@ before_script:
 script:
 - export DJANGO_SECRETKEY=secret
 - coverage run --source=habitica_slack manage.py test
+- coverage xml
 
 after_script:
   - ./cc-test-reporter after-build -t coverage.py --exit-code $TRAVIS_TEST_RESULT
