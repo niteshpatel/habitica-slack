@@ -5,18 +5,25 @@ python:
 
 env:
 - DJANGO=1.10.1
+  global:
+    - CC_TEST_REPORTER_ID=c58f68be8b3bdb0ce6b42fe37093649753c32d4fbd49f2236c17702da6f70056
 
 install:
 - pip install -r requirements.txt
-- pip install codeclimate-test-reporter
+- pip install coverage
 - pip install -q Django==$DJANGO
 
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+  
 script:
 - export DJANGO_SECRETKEY=secret
 - coverage run --source=habitica_slack manage.py test
 
 after_script:
-- codeclimate-test-reporter --file .coverage
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
 notifications:
   slack:
