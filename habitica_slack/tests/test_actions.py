@@ -56,7 +56,7 @@ class ActionsTestCase(TestCase):
         }
 
         expected_url = 'https://habitica.com/api/v3/groups/123/chat'
-        expected_body = 'message=%5BJoe+says%5D+Hello%21&groupId=123'
+        expected_body = 'message=Hello%21&groupId=123'
 
         m.post(requests_mock.ANY)
 
@@ -91,9 +91,9 @@ class ActionsTestCase(TestCase):
         self.assertEqual(len(history), 0)
 
     @requests_mock.mock()
-    def test_send_message_to_habitica_from_other_user_when_in_single_user_mode_does_nothing(self, m):
+    def test_send_message_to_habitica_from_other_user_when_filter_user_id_set_does_nothing(self, m):
         # arrange
-        os.environ['SINGLE_USER'] = 'me'
+        os.environ['FILTER_USER_ID'] = 'me'
 
         data = {
             'user': 'someone else',
@@ -110,7 +110,7 @@ class ActionsTestCase(TestCase):
         self.assertEqual(len(history), 0)
 
         # teardown
-        del os.environ['SINGLE_USER']
+        del os.environ['FILTER_USER_ID']
 
     @requests_mock.mock()
     def test_get_messages_from_habitica_makes_web_request_to_habitica_with_expected_contents(self, m):

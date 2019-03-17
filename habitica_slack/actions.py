@@ -32,12 +32,12 @@ def get_lastpost_timestamp():
     return last_post_time_stamp.time_stamp
 
 
-def send_message_to_habitica(user, text):
-    if user.lower() == 'slackbot':
+def send_message_to_habitica(user_id, text):
+    if user_id.lower() == 'slackbot':
         return
 
-    single_user = os.environ.get('SINGLE_USER')
-    if single_user and single_user.lower() != user.lower():
+    filter_user_id = os.environ.get('FILTER_USER_ID')
+    if filter_user_id and filter_user_id.lower() != user_id.lower():
         return
 
     api_user = os.environ['HABITICA_APIUSER']
@@ -51,10 +51,9 @@ def send_message_to_habitica(user, text):
         'x-api-key': api_key
     }
 
-    prefix = '' if single_user else '[%s says] ' % user
     data = {
         'groupId': group_id,
-        'message': '%s%s' % (prefix, text)
+        'message': text
     }
 
     response = requests.post(habitica_url, headers=headers, data=data)

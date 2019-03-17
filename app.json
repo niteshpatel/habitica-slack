@@ -26,12 +26,11 @@
     "SLACK_WEBHOOK": {
       "description": "Your Slack Incoming WebHook URL (found under your https://slack.com/apps/manage/custom-integrations)."
     },
-    "SINGLE_USER": {
-      "description": "Only allow messages to be sent from this Slack user.  If this is blank, then any user can send messages, and the message will be prefixed by their name.",
-      "required": false
-    },
     "HABITICA_USERNAME": {
-      "description": "If you supply SINGLE_USER above then you must provide your Habitica name here, otherwise any message you send from Slack will also be posted back to Slack.",
+      "description": "Habitica username is required otherwise any message you send from Slack will also be duplicated back to Slack."
+    },
+    "FILTER_USER_ID": {
+      "description": "Only allow messages to be sent from a Slack user with this user_id (which is not the same as username).  If this is blank, then any user can send messages.",
       "required": false
     }
   },

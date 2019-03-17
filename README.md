@@ -6,17 +6,21 @@
 ## Requirements
 
 ### Slack Integrations
-As well as a Slack channel and a Habitica account, you need to [set up custom integrations in Slack](https://slack.com/apps/manage/custom-integrations):
+As well as a Slack channel and a Habitica account, you need to [create a slack app to manage message delivery](https://api.slack.com/slack-apps#creating_apps):
 
-1. Outgoing WebHook in Slack to forward messages to Habitica
-1. Incoming WebHook in Slack to received messages from Habitica
+1. Setup Event Subscriptions in Slack to support sending messages from Slack to Habitica
+1. Setup Incoming WebHooks in Slack to support receiving messages from Habitica to Slack
 
-#### Outgoing WebHook Settings
-1. Channel: &lt;your-slack-channel&gt; e.g. #Habitica
-1. URL: &lt;heroku-app-url&gt;/sync_message_to_habitica e.g. https://myapp.herokuapp.test/sync_message_to_habitica
+#### Setup Event Subscriptions in Slack
+1. Browse to Event Subscriptions
+1. Enable Events: On
+1. Request URL: &lt;heroku-app-url&gt;/sync_message_to_habitica e.g. https://myapp.herokuapp.test/sync_message_to_habitica
+1. Subscribe to Workspace Events > Add Workspace Event: message.channels
 
-#### Incoming WebHook Settings
-1. Post to Channel: &lt;your-slack-channel&gt; e.g. #Habitica
+#### Setup Incoming WebHooks in Slack
+1. Browse to Incoming Webhooks
+1. Activate Incoming Webhooks: On
+1. Webhook URLs for Your Workspace > Add New Webhook to Workspace: Post to: &lt;your-slack-channel&gt; e.g. #Habitica
 
 ### Setup Habitica WebHook
 1. Visit &lt;heroku-app-url&gt;/setup_habitica_webhook to setup the Habitica webhook
