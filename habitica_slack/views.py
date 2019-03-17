@@ -10,15 +10,16 @@ from habitica_slack import actions
 @csrf_exempt
 def sync_message_to_habitica(request):
     fields = json.loads(request.body)
-    token = fields.get('token')
-    if token != os.environ['SLACK_TOKEN']:
-        return HttpResponse('', status=401)
 
     if fields.get('type') == 'url_verification':
         challenge = fields.get('challenge')
         return HttpResponse(challenge, content_type='text/plain', status=200)
 
-    elif fields.get('event') and fields['event'].get('type') == 'message':
+    token = fields.get('token')
+    if token != os.environ['SLACK_TOKEN']:
+        return HttpResponse('', status=401)
+
+    if fields.get('event') and fields['event'].get('type') == 'message':
         event = fields.get('event')
         actions.send_message_to_habitica(
             event.get('user'),
