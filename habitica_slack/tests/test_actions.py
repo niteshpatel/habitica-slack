@@ -41,8 +41,8 @@ class ActionsTestCase(TestCase):
         last_post_timestamp = actions.get_lastpost_timestamp()
         self.assertEqual(timestamp, last_post_timestamp)
 
-    #@requests_mock.mock()
-    def test_send_message_to_habitica_from_user_makes_web_request_to_habitica_with_expected_contents(self):#, m):
+    @requests_mock.mock()
+    def test_send_message_to_habitica_from_user_makes_web_request_to_habitica_with_expected_contents(self, m):
         # arrange
         data = {
             'user': 'Joe',
@@ -58,7 +58,7 @@ class ActionsTestCase(TestCase):
         expected_url = 'https://habitica.com/api/v3/groups/123/chat'
         expected_body = 'message=%5BJoe+says%5D+Hello%21&groupId=123'
 
-        #m.post(requests_mock.ANY)
+        m.post(requests_mock.ANY)
 
         # act
         actions.send_message_to_habitica(data['user'], data['text'])
