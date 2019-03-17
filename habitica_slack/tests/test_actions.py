@@ -20,17 +20,17 @@ class ActionsTestCase(TestCase):
         os.environ['HABITICA_GROUPID'] = self.groupId
         os.environ['SLACK_WEBHOOK'] = self.slackWebhook
 
-    def test_get_default_lastpost_timestamp(self):
+    def test_get_default_lastpost_timestamp_returns_timestamp_from_one_hour_ago(self):
         # arrange
-        now_timestamp = actions.get_timestamp_one_hour_ago()
+        timestamp_one_hour_ago = actions.get_timestamp_one_hour_ago()
 
         # act
         last_post_timestamp = actions.get_lastpost_timestamp()
 
         # assert
-        self.assertEqual(last_post_timestamp, now_timestamp)
+        self.assertEqual(timestamp_one_hour_ago, last_post_timestamp)
 
-    def test_set_lastpost_timestamp(self):
+    def test_set_lastpost_timestamp_sets_lastpost_timestamp(self):
         # arrange
         timestamp = 123
 
@@ -39,10 +39,10 @@ class ActionsTestCase(TestCase):
 
         # assert
         last_post_timestamp = actions.get_lastpost_timestamp()
-        self.assertEqual(last_post_timestamp, timestamp)
+        self.assertEqual(timestamp, last_post_timestamp)
 
-    @requests_mock.mock()
-    def test_send_message_to_habitica_from_user(self, m):
+    #@requests_mock.mock()
+    def test_send_message_to_habitica_from_user_makes_web_request_to_habitica_with_expected_contents(self):#, m):
         # arrange
         data = {
             'user': 'Joe',
@@ -58,7 +58,7 @@ class ActionsTestCase(TestCase):
         expected_url = 'https://habitica.com/api/v3/groups/123/chat'
         expected_body = 'message=%5BJoe+says%5D+Hello%21&groupId=123'
 
-        m.post(requests_mock.ANY)
+        #m.post(requests_mock.ANY)
 
         # act
         actions.send_message_to_habitica(data['user'], data['text'])
@@ -113,7 +113,7 @@ class ActionsTestCase(TestCase):
         del os.environ['SINGLE_USER']
 
     @requests_mock.mock()
-    def test_get_messages_from_habitica(self, m):
+    def test_get_messages_from_habitica_makes_web_request_to_habitica_with_expected_contents(self, m):
         # arrange
         expected_headers = {
             'x-api-user': self.apiUser,
@@ -139,7 +139,7 @@ class ActionsTestCase(TestCase):
         self.assertEqual(response, 'dummy_data')
 
     @requests_mock.mock()
-    def test_send_messages_to_slack(self, m):
+    def test_send_messages_to_slack_makes_web_request_to_slack_with_expected_contents(self, m):
         # arrange
         os.environ['HABITICA_USERNAME'] = 'Karthik'
 
@@ -243,7 +243,7 @@ class ActionsTestCase(TestCase):
         del os.environ['HABITICA_USERNAME']
 
     # noinspection PyMethodMayBeStatic
-    def test_sync_messages_to_slack(self):
+    def test_sync_messages_to_slack_calls_send_messages_to_slack_with_expected_messages(self):
         # arrange
         expected_timestamp = 3
         expected_messages = [1, 2, 3]

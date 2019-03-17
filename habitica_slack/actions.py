@@ -57,7 +57,8 @@ def send_message_to_habitica(user, text):
         'message': '%s%s' % (prefix, text)
     }
 
-    requests.post(habitica_url, headers=headers, data=data)
+    response = requests.post(habitica_url, headers=headers, data=data)
+    return response
 
 
 def get_messages_from_habitica():

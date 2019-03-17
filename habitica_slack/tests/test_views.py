@@ -13,7 +13,7 @@ class ViewsTestCase(TestCase):
 
         os.environ['SLACK_TOKEN'] = self.slackToken
 
-    def test_sync_message_to_habitica_responds_to_invalid_auth_request_with_unauthorized(self):
+    def test_sync_message_to_habitica_with_invalid_challenge_returns_unauthorized(self):
         # arrange
         dummy_request = create_dummy_post_request()
         dummy_request.body = json.dumps({
@@ -31,7 +31,7 @@ class ViewsTestCase(TestCase):
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response.content, '')
 
-    def test_sync_message_to_habitica_responds_to_valid_url_auth_request_with_ok(self):
+    def test_sync_message_to_habitica_with_valid_challenge_returns_ok(self):
         # arrange
         dummy_request = create_dummy_post_request()
         dummy_request.body = json.dumps({
@@ -50,7 +50,7 @@ class ViewsTestCase(TestCase):
         self.assertEqual(response.get('Content-Type'), 'text/plain')
         self.assertEqual(response.content, 'my_challenge')
 
-    def test_sync_message_to_habitica_responds_to_invalid_token_with_unauthorized(self):
+    def test_sync_message_to_habitica_with_invalid_token_returns_unauthorized(self):
         # arrange
         user_name = 'Joe'
         text = 'Hello'
@@ -71,7 +71,7 @@ class ViewsTestCase(TestCase):
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response.content, '')
 
-    def test_sync_message_to_habitica_with_valid_token_sends_message_to_habitica(self):
+    def test_sync_message_to_habitica_with_valid_token_returns_ok_and_sends_message(self):
         # arrange
         user_name = 'Joe'
         text = 'Hello'
@@ -98,7 +98,7 @@ class ViewsTestCase(TestCase):
         self.assertEqual(response.content, '')
         views.actions.send_message_to_habitica.assert_called_with(user_name, text)
 
-    def test_sync_messages_to_slack(self):
+    def test_sync_messages_to_slack_returns_ok(self):
         # arrange
         dummy_request = create_dummy_post_request()
         views.actions.sync_messages_to_slack = mock.Mock(return_value=None)
@@ -112,7 +112,7 @@ class ViewsTestCase(TestCase):
         self.assertEqual(response.content, '')
         self.assertEqual(response.status_code, 200)
 
-    def test_setup_habitica_webhook(self):
+    def test_setup_habitica_webhook_returns_ok(self):
         # arrange
         dummy_request = create_dummy_post_request()
         views.actions.setup_habitica_webhook = mock.Mock(return_value=(200, 'OK'))
