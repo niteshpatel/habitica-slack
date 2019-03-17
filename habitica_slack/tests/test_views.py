@@ -1,3 +1,4 @@
+import json
 import os
 
 import mock
@@ -12,17 +13,14 @@ class ViewsTestCase(TestCase):
 
         os.environ['SLACK_TOKEN'] = self.slackToken
 
-    def test_sync_message_to_habitica_with_valid_token(self):
+    def test_sync_message_to_habitica_responds_to_invalid_auth_request_with_unauthorized(self):
         # arrange
-        user_name = 'Joe'
-        text = 'Hello'
-
         dummy_request = create_dummy_post_request()
-        dummy_request.POST = {
+        dummy_request.body = json.dumps({
             'token': self.slackToken,
-            'user_name': user_name,
-            'text': text
-        }
+            'challenge': 'my_challenge',
+            'type': 'arbitrary_event_type',
+        })
 
         views.actions.send_message_to_habitica = mock.Mock()
 
@@ -30,25 +28,75 @@ class ViewsTestCase(TestCase):
         response = views.sync_message_to_habitica(dummy_request)
 
         # assert
-        # noinspection PyUnresolvedReferences
-        views.actions.send_message_to_habitica.assert_called_with(user_name, text)
+        self.assertEqual(response.status_code, 401)
         self.assertEqual(response.content, '')
-        self.assertEqual(response.status_code, 200)
 
-    def test_sync_message_to_habitica_with_invalid_token(self):
+    def test_sync_message_to_habitica_responds_to_valid_url_auth_request_with_ok(self):
         # arrange
         dummy_request = create_dummy_post_request()
-        dummy_request.POST = {}
-        views.actions.send_message_to_habitica = mock.Mock(return_value=None)
+        dummy_request.body = json.dumps({
+            'token': self.slackToken,
+            'challenge': 'my_challenge',
+            'type': 'url_verification',
+        })
+
+        views.actions.send_message_to_habitica = mock.Mock()
 
         # act
         response = views.sync_message_to_habitica(dummy_request)
 
         # assert
-        # noinspection PyUnresolvedReferences
-        views.actions.send_message_to_habitica.assert_not_called()
-        self.assertEqual(response.content, '')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.get('Content-Type'), 'text/plain')
+        self.assertEqual(response.content, 'my_challenge')
+
+    def test_sync_message_to_habitica_responds_to_invalid_token_with_unauthorized(self):
+        # arrange
+        user_name = 'Joe'
+        text = 'Hello'
+
+        dummy_request = create_dummy_post_request()
+        dummy_request.body = json.dumps({
+            'token': 'wrong_token',
+            'user_name': user_name,
+            'text': text
+        })
+
+        views.actions.send_message_to_habitica = mock.Mock()
+
+        # act
+        response = views.sync_message_to_habitica(dummy_request)
+
+        # assert
         self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.content, '')
+
+    def test_sync_message_to_habitica_with_valid_token_sends_message_to_habitica(self):
+        # arrange
+        user_name = 'Joe'
+        text = 'Hello'
+
+        dummy_request = create_dummy_post_request()
+        dummy_request.body = json.dumps({
+            'token': self.slackToken,
+            'event': {
+                'type': 'message',
+                'channel': 'my_channel',
+                'user': user_name,
+                'text': text,
+            },
+            'type': 'event_callback',
+        })
+
+        views.actions.send_message_to_habitica = mock.Mock()
+
+        # act
+        response = views.sync_message_to_habitica(dummy_request)
+
+        # assert
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, '')
+        views.actions.send_message_to_habitica.assert_called_with(user_name, text)
 
     def test_sync_messages_to_slack(self):
         # arrange
