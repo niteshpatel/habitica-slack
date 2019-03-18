@@ -16,6 +16,7 @@ As well as a Slack channel and a Habitica account, you need to [create a slack a
 1. Enable Events: On
 1. Request URL: &lt;heroku-app-url&gt;/sync_message_to_habitica e.g. https://myapp.herokuapp.test/sync_message_to_habitica
 1. Subscribe to Workspace Events > Add Workspace Event: message.channels
+1. Subscribe to Workspace Events > Add Workspace Event: message.groups
 
 #### Setup Incoming WebHooks in Slack
 1. Browse to Incoming Webhooks

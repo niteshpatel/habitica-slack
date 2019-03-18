@@ -20,11 +20,14 @@
     "HABITICA_GROUPID": {
       "description": "Your Habitica Group ID (found here https://habitica.com/#/options/groups/party)."
     },
+    "SLACK_CHANNEL": {
+      "description": "Your Slack Channel ID (you can get this from the channel URL, e.g. for https://yourworkspace.slack.com/messages/C2M7P8H32/, channel id would be C2M7P8H32"
+    },
     "SLACK_TOKEN": {
-      "description": "Your Slack Outgoing WebHook Token (found under your https://slack.com/apps/manage/custom-integrations)."
+      "description": "Your Slack App Verification Token (found in your Slack App Credentials under https://api.slack.com/apps > <Your App>)."
     },
     "SLACK_WEBHOOK": {
-      "description": "Your Slack Incoming WebHook URL (found under your https://slack.com/apps/manage/custom-integrations)."
+      "description": "Your Slack App Incoming WebHook URL (found in your Slack App Incoming Webhooks under  https://api.slack.com/apps > <Your App> > Incoming Webhooks)."
     },
     "HABITICA_USERNAME": {
       "description": "Habitica username is required otherwise any message you send from Slack will also be duplicated back to Slack."

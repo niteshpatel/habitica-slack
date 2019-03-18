@@ -12,6 +12,7 @@ class ViewsTestCase(TestCase):
         self.slackToken = 'token'
 
         os.environ['SLACK_TOKEN'] = self.slackToken
+        os.environ['SLACK_CHANNEL'] = 'my_channel'
 
     def test_sync_message_to_habitica_with_invalid_challenge_returns_unauthorized(self):
         # arrange
@@ -29,7 +30,7 @@ class ViewsTestCase(TestCase):
 
         # assert
         self.assertEqual(response.status_code, 401)
-        self.assertEqual(response.content, '')
+        self.assertEqual(response.content, 'unauthorized request')
 
     def test_sync_message_to_habitica_with_valid_challenge_returns_ok(self):
         # arrange
@@ -58,8 +59,13 @@ class ViewsTestCase(TestCase):
         dummy_request = create_dummy_post_request()
         dummy_request.body = json.dumps({
             'token': 'wrong_token',
-            'user_name': user_name,
-            'text': text
+            'event': {
+                'type': 'message',
+                'channel': 'my_channel',
+                'user': user_name,
+                'text': text,
+            },
+            'type': 'event_callback',
         })
 
         views.actions.send_message_to_habitica = mock.Mock()
@@ -69,7 +75,33 @@ class ViewsTestCase(TestCase):
 
         # assert
         self.assertEqual(response.status_code, 401)
-        self.assertEqual(response.content, '')
+        self.assertEqual(response.content, 'invalid token')
+
+    def test_sync_message_to_habitica_with_invalid_channel_returns_unauthorized(self):
+        # arrange
+        user_name = 'Joe'
+        text = 'Hello'
+
+        dummy_request = create_dummy_post_request()
+        dummy_request.body = json.dumps({
+            'token': self.slackToken,
+            'event': {
+                'type': 'message',
+                'channel': 'wrong_channel',
+                'user': user_name,
+                'text': text,
+            },
+            'type': 'event_callback',
+        })
+
+        views.actions.send_message_to_habitica = mock.Mock()
+
+        # act
+        response = views.sync_message_to_habitica(dummy_request)
+
+        # assert
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.content, 'invalid channel')
 
     def test_sync_message_to_habitica_with_valid_token_returns_ok_and_sends_message(self):
         # arrange

@@ -17,16 +17,20 @@ def sync_message_to_habitica(request):
 
     token = fields.get('token')
     if token != os.environ['SLACK_TOKEN']:
-        return HttpResponse('', status=401)
+        return HttpResponse('invalid token', status=401)
 
-    if fields.get('event') and fields['event'].get('type') == 'message':
-        event = fields.get('event')
-        actions.send_message_to_habitica(
-            event.get('user'),
-            event.get('text'))
-        return HttpResponse('', status=200)
+    event = fields.get('event')
+    if event:
+        if event.get('type') == 'message':
+            if event.get('channel') != os.environ['SLACK_CHANNEL']:
+                return HttpResponse('invalid channel', status=401)
 
-    return HttpResponse('', status=401)
+            actions.send_message_to_habitica(
+                event.get('user'),
+                event.get('text'))
+            return HttpResponse('', status=200)
+
+    return HttpResponse('unauthorized request', status=401)
 
 
 @csrf_exempt
