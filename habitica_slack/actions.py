@@ -36,7 +36,7 @@ def send_message_to_habitica(user_id, text):
     if user_id.lower() == 'slackbot':
         return
 
-    filter_user_id = os.environ.get('FILTER_USER_ID')
+    filter_user_id = os.environ.get('SLACK_USER_ID_FILTER')
     if filter_user_id and filter_user_id.lower() != user_id.lower():
         return
 

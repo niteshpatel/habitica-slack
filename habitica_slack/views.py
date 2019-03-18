@@ -22,7 +22,7 @@ def sync_message_to_habitica(request):
     event = fields.get('event')
     if event:
         if event.get('type') == 'message':
-            if event.get('channel') != os.environ['SLACK_CHANNEL']:
+            if event.get('channel') != os.environ['SLACK_CHANNEL_ID']:
                 return HttpResponse('invalid channel', status=401)
 
             actions.send_message_to_habitica(

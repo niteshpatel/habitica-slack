@@ -12,7 +12,7 @@ class ViewsTestCase(TestCase):
         self.slackToken = 'token'
 
         os.environ['SLACK_TOKEN'] = self.slackToken
-        os.environ['SLACK_CHANNEL'] = 'my_channel'
+        os.environ['SLACK_CHANNEL_ID'] = 'my_channel'
 
     def test_sync_message_to_habitica_with_invalid_challenge_returns_unauthorized(self):
         # arrange

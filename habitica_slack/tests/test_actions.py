@@ -93,7 +93,7 @@ class ActionsTestCase(TestCase):
     @requests_mock.mock()
     def test_send_message_to_habitica_from_other_user_when_filter_user_id_set_does_nothing(self, m):
         # arrange
-        os.environ['FILTER_USER_ID'] = 'me'
+        os.environ['SLACK_USER_ID_FILTER'] = 'me'
 
         data = {
             'user': 'someone else',
@@ -110,33 +110,7 @@ class ActionsTestCase(TestCase):
         self.assertEqual(len(history), 0)
 
         # teardown
-        del os.environ['FILTER_USER_ID']
-
-    @requests_mock.mock()
-    def test_get_messages_from_habitica_makes_web_request_to_habitica_with_expected_contents(self, m):
-        # arrange
-        expected_headers = {
-            'x-api-user': self.apiUser,
-            'x-api-key': self.apiKey
-        }
-
-        expected_url = 'https://habitica.com/api/v3/groups/123/chat'
-
-        m.get(requests_mock.ANY, text=json.dumps({'data': 'dummy_data'}))
-
-        # act
-        response = actions.get_messages_from_habitica()
-
-        # assert
-        history = m.request_history
-        self.assertEqual(len(history), 1)
-
-        request = history[0]
-        self.assertEqual(request.url, expected_url)
-        self.assertEqual(request.method, 'GET')
-        self.assertDictContainsSubset(expected_headers, request.headers)
-        self.assertEqual(request.body, None)
-        self.assertEqual(response, 'dummy_data')
+        del os.environ['SLACK_USER_ID_FILTER']
 
     @requests_mock.mock()
     def test_send_messages_to_slack_makes_web_request_to_slack_with_expected_contents(self, m):
@@ -241,6 +215,32 @@ class ActionsTestCase(TestCase):
 
         # teardown
         del os.environ['HABITICA_USERNAME']
+
+    @requests_mock.mock()
+    def test_get_messages_from_habitica_makes_web_request_to_habitica_with_expected_contents(self, m):
+        # arrange
+        expected_headers = {
+            'x-api-user': self.apiUser,
+            'x-api-key': self.apiKey
+        }
+
+        expected_url = 'https://habitica.com/api/v3/groups/123/chat'
+
+        m.get(requests_mock.ANY, text=json.dumps({'data': 'dummy_data'}))
+
+        # act
+        response = actions.get_messages_from_habitica()
+
+        # assert
+        history = m.request_history
+        self.assertEqual(len(history), 1)
+
+        request = history[0]
+        self.assertEqual(request.url, expected_url)
+        self.assertEqual(request.method, 'GET')
+        self.assertDictContainsSubset(expected_headers, request.headers)
+        self.assertEqual(request.body, None)
+        self.assertEqual(response, 'dummy_data')
 
     # noinspection PyMethodMayBeStatic
     def test_sync_messages_to_slack_calls_send_messages_to_slack_with_expected_messages(self):

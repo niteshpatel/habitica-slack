@@ -20,7 +20,7 @@
     "HABITICA_GROUPID": {
       "description": "Your Habitica Group ID (found here https://habitica.com/#/options/groups/party)."
     },
-    "SLACK_CHANNEL": {
+    "SLACK_CHANNEL_ID": {
       "description": "Your Slack Channel ID (you can get this from the channel URL, e.g. for https://yourworkspace.slack.com/messages/C2M7P8H32/, channel id would be C2M7P8H32"
     },
     "SLACK_TOKEN": {
@@ -32,8 +32,8 @@
     "HABITICA_USERNAME": {
       "description": "Habitica username is required otherwise any message you send from Slack will also be duplicated back to Slack."
     },
-    "FILTER_USER_ID": {
-      "description": "Only allow messages to be sent from a Slack user with this user_id (which is not the same as username).  If this is blank, then any user can send messages.",
+    "SLACK_USER_ID_FILTER": {
+      "description": "Only allow messages to be sent from a Slack user with this User ID (which is not the same as username).  If this is blank, then any user can send messages.",
       "required": false
     }
   },
