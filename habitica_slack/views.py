@@ -30,7 +30,7 @@ def sync_message_to_habitica(request):
             return HttpResponse('invalid signature', status=401)
     else:
         token = fields.get('token')
-        if token != os.environ['SLACK_TOKEN']:
+        if token != os.environ.get('SLACK_TOKEN'):
             return HttpResponse('invalid token', status=401)
 
     event = fields.get('event')
@@ -58,3 +58,12 @@ def setup_habitica_webhook(request):
     status_code, reason_phrase = actions.setup_habitica_webhook(request.build_absolute_uri('/'))
 
     return HttpResponse(reason_phrase, status=status_code)
+
+
+def make_request_signature(signing_secret, timestamp, request_body):
+    sig_basestring = 'v0:{0}:{1}'.format(timestamp, request_body)
+
+    signature = 'v0={0}'.format(
+        hmac.new(signing_secret, sig_basestring, hashlib.sha256).hexdigest()
+    )
+    return signature

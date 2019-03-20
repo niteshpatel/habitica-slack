@@ -9,34 +9,12 @@ from habitica_slack import views
 
 class ViewsTestCase(TestCase):
     def setUp(self):
-        self.slackToken = 'token'
-
-        os.environ['SLACK_TOKEN'] = self.slackToken
         os.environ['SLACK_CHANNEL_ID'] = 'my_channel'
-
-    def test_sync_message_to_habitica_with_invalid_challenge_returns_unauthorized(self):
-        # arrange
-        dummy_request = create_dummy_post_request()
-        dummy_request.body = json.dumps({
-            'token': self.slackToken,
-            'challenge': 'my_challenge',
-            'type': 'arbitrary_event_type',
-        })
-
-        views.actions.send_message_to_habitica = mock.Mock()
-
-        # act
-        response = views.sync_message_to_habitica(dummy_request)
-
-        # assert
-        self.assertEqual(response.status_code, 401)
-        self.assertEqual(response.content, 'unauthorized request')
 
     def test_sync_message_to_habitica_with_valid_challenge_returns_ok(self):
         # arrange
         dummy_request = create_dummy_post_request()
         dummy_request.body = json.dumps({
-            'token': self.slackToken,
             'challenge': 'my_challenge',
             'type': 'url_verification',
         })
@@ -67,6 +45,14 @@ class ViewsTestCase(TestCase):
             },
             'type': 'event_callback',
         })
+        dummy_request.META = {
+            'HTTP_X_SLACK_REQUEST_TIMESTAMP': 'my_timestamp',
+            'HTTP_X_SLACK_SIGNATURE': views.make_request_signature(
+                'my_secret',
+                'my_timestamp',
+                dummy_request.body,
+            ),
+        }
 
         views.actions.send_message_to_habitica = mock.Mock()
 
@@ -85,10 +71,6 @@ class ViewsTestCase(TestCase):
         os.environ['SLACK_SIGNING_SECRET'] = 'my_secret'
 
         dummy_request = create_dummy_post_request()
-        dummy_request.META = {
-            'HTTP_X_SLACK_REQUEST_TIMESTAMP': 'my_timestamp',
-            'HTTP_X_SLACK_SIGNATURE': 'my_signature',
-        }
         dummy_request.body = json.dumps({
             'event': {
                 'type': 'message',
@@ -98,6 +80,10 @@ class ViewsTestCase(TestCase):
             },
             'type': 'event_callback',
         })
+        dummy_request.META = {
+            'HTTP_X_SLACK_REQUEST_TIMESTAMP': 'my_timestamp',
+            'HTTP_X_SLACK_SIGNATURE': 'my_signature',
+        }
 
         views.actions.send_message_to_habitica = mock.Mock()
 
@@ -113,9 +99,10 @@ class ViewsTestCase(TestCase):
         user_name = 'Joe'
         text = 'Hello'
 
+        os.environ['SLACK_SIGNING_SECRET'] = 'my_secret'
+
         dummy_request = create_dummy_post_request()
         dummy_request.body = json.dumps({
-            'token': self.slackToken,
             'event': {
                 'type': 'message',
                 'channel': 'wrong_channel',
@@ -124,6 +111,14 @@ class ViewsTestCase(TestCase):
             },
             'type': 'event_callback',
         })
+        dummy_request.META = {
+            'HTTP_X_SLACK_REQUEST_TIMESTAMP': 'my_timestamp',
+            'HTTP_X_SLACK_SIGNATURE': views.make_request_signature(
+                'my_secret',
+                'my_timestamp',
+                dummy_request.body,
+            ),
+        }
 
         views.actions.send_message_to_habitica = mock.Mock()
 
@@ -139,15 +134,11 @@ class ViewsTestCase(TestCase):
         user_name = 'Joe'
         text = 'Hello'
 
-        os.environ['SLACK_SIGNING_SECRET'] = 'my_secret'
+        os.environ['SLACK_TOKEN'] = 'my_token'
 
         dummy_request = create_dummy_post_request()
-        dummy_request.META = {
-            'HTTP_X_SLACK_REQUEST_TIMESTAMP': 'my_timestamp',
-            'HTTP_X_SLACK_SIGNATURE': 'v0=5b9ec499888c491c5fba9746958a7cdfa2e961154b195734921ca272c9da75d4',
-        }
         dummy_request.body = json.dumps({
-            'token': self.slackToken,
+            'token': 'my_token',
             'event': {
                 'type': 'message',
                 'channel': 'my_channel',
@@ -156,6 +147,50 @@ class ViewsTestCase(TestCase):
             },
             'type': 'event_callback',
         })
+        dummy_request.META = {
+            'HTTP_X_SLACK_REQUEST_TIMESTAMP': 'my_timestamp',
+            'HTTP_X_SLACK_SIGNATURE': views.make_request_signature(
+                'my_secret',
+                'my_timestamp',
+                dummy_request.body,
+            )
+        }
+
+        views.actions.send_message_to_habitica = mock.Mock()
+
+        # act
+        response = views.sync_message_to_habitica(dummy_request)
+
+        # assert
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, '')
+        views.actions.send_message_to_habitica.assert_called_with(user_name, text)
+
+    def test_sync_message_to_habitica_with_valid_signing_secret_returns_ok_and_sends_message(self):
+        # arrange
+        user_name = 'Joe'
+        text = 'Hello'
+
+        os.environ['SLACK_SIGNING_SECRET'] = 'my_secret'
+
+        dummy_request = create_dummy_post_request()
+        dummy_request.body = json.dumps({
+            'event': {
+                'type': 'message',
+                'channel': 'my_channel',
+                'user': user_name,
+                'text': text,
+            },
+            'type': 'event_callback',
+        })
+        dummy_request.META = {
+            'HTTP_X_SLACK_REQUEST_TIMESTAMP': 'my_timestamp',
+            'HTTP_X_SLACK_SIGNATURE': views.make_request_signature(
+                'my_secret',
+                'my_timestamp',
+                dummy_request.body,
+            )
+        }
 
         views.actions.send_message_to_habitica = mock.Mock()
 
@@ -194,6 +229,9 @@ class ViewsTestCase(TestCase):
         views.actions.setup_habitica_webhook.assert_called_with(None)
         self.assertEqual(response.content, 'OK')
         self.assertEqual(response.reason_phrase, 'OK')
+
+    def tearDown(self):
+        os.environ = {}
 
 
 def create_dummy_post_request():
