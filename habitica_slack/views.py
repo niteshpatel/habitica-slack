@@ -17,10 +17,10 @@ def sync_message_to_habitica(request):
         challenge = fields.get('challenge')
         return HttpResponse(challenge, content_type='text/plain', status=200)
 
-    slack_signature = request.headers.get('X-Slack-Signature')
+    slack_signature = request.META.get('HTTP_X_SLACK_SIGNATURE')
     slack_signing_secret = os.environ.get('SLACK_SIGNING_SECRET')
     if slack_signature and slack_signing_secret:
-        timestamp = request.headers.get('X-Slack-Request-Timestamp', '')
+        timestamp = request.META.get('HTTP_X_SLACK_REQUEST_TIMESTAMP', '')
         sig_basestring = 'v0:{0}:{1}'.format(timestamp, request.body)
 
         my_signature = 'v0={0}'.format(

@@ -85,9 +85,9 @@ class ViewsTestCase(TestCase):
         os.environ['SLACK_SIGNING_SECRET'] = 'my_secret'
 
         dummy_request = create_dummy_post_request()
-        dummy_request.headers = {
-            'X-Slack-Request-Timestamp': 'my_timestamp',
-            'X-Slack-Signature': 'my_signature',
+        dummy_request.META = {
+            'HTTP_X_SLACK_REQUEST_TIMESTAMP': 'my_timestamp',
+            'HTTP_X_SLACK_SIGNATURE': 'my_signature',
         }
         dummy_request.body = json.dumps({
             'event': {
@@ -142,9 +142,9 @@ class ViewsTestCase(TestCase):
         os.environ['SLACK_SIGNING_SECRET'] = 'my_secret'
 
         dummy_request = create_dummy_post_request()
-        dummy_request.headers = {
-            'X-Slack-Request-Timestamp': 'my_timestamp',
-            'X-Slack-Signature': 'v0=5b9ec499888c491c5fba9746958a7cdfa2e961154b195734921ca272c9da75d4',
+        dummy_request.META = {
+            'HTTP_X_SLACK_REQUEST_TIMESTAMP': 'my_timestamp',
+            'HTTP_X_SLACK_SIGNATURE': 'v0=5b9ec499888c491c5fba9746958a7cdfa2e961154b195734921ca272c9da75d4',
         }
         dummy_request.body = json.dumps({
             'token': self.slackToken,
@@ -198,7 +198,7 @@ class ViewsTestCase(TestCase):
 
 def create_dummy_post_request():
     dummy_request = type('', (), {})()
-    dummy_request.headers = {}
+    dummy_request.META = {}
     dummy_request.POST = {}
     dummy_request.build_absolute_uri = lambda path: None
 
