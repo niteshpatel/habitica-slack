@@ -77,6 +77,37 @@ class ViewsTestCase(TestCase):
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response.content, 'invalid token')
 
+    def test_sync_message_to_habitica_with_invalid_signing_secret_returns_unauthorized(self):
+        # arrange
+        user_name = 'Joe'
+        text = 'Hello'
+
+        os.environ['SLACK_SIGNING_SECRET'] = 'my_secret'
+
+        dummy_request = create_dummy_post_request()
+        dummy_request.headers = {
+            'X-Slack-Request-Timestamp': 'my_timestamp',
+            'X-Slack-Signature': 'my_signature',
+        }
+        dummy_request.body = json.dumps({
+            'event': {
+                'type': 'message',
+                'channel': 'my_channel',
+                'user': user_name,
+                'text': text,
+            },
+            'type': 'event_callback',
+        })
+
+        views.actions.send_message_to_habitica = mock.Mock()
+
+        # act
+        response = views.sync_message_to_habitica(dummy_request)
+
+        # assert
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.content, 'invalid signature')
+
     def test_sync_message_to_habitica_with_invalid_channel_returns_unauthorized(self):
         # arrange
         user_name = 'Joe'
@@ -108,7 +139,13 @@ class ViewsTestCase(TestCase):
         user_name = 'Joe'
         text = 'Hello'
 
+        os.environ['SLACK_SIGNING_SECRET'] = 'my_secret'
+
         dummy_request = create_dummy_post_request()
+        dummy_request.headers = {
+            'X-Slack-Request-Timestamp': 'my_timestamp',
+            'X-Slack-Signature': 'v0=5b9ec499888c491c5fba9746958a7cdfa2e961154b195734921ca272c9da75d4',
+        }
         dummy_request.body = json.dumps({
             'token': self.slackToken,
             'event': {
@@ -161,6 +198,7 @@ class ViewsTestCase(TestCase):
 
 def create_dummy_post_request():
     dummy_request = type('', (), {})()
+    dummy_request.headers = {}
     dummy_request.POST = {}
     dummy_request.build_absolute_uri = lambda path: None
 

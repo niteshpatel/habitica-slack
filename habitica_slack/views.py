@@ -1,3 +1,5 @@
+import hashlib
+import hmac
 import json
 import os
 
@@ -14,6 +16,18 @@ def sync_message_to_habitica(request):
     if fields.get('type') == 'url_verification':
         challenge = fields.get('challenge')
         return HttpResponse(challenge, content_type='text/plain', status=200)
+
+    slack_signature = request.headers.get('X-Slack-Signature')
+    slack_signing_secret = os.environ.get('SLACK_SIGNING_SECRET')
+    if slack_signature and slack_signing_secret:
+        timestamp = request.headers.get('X-Slack-Request-Timestamp', '')
+        sig_basestring = 'v0:{0}:{1}'.format(timestamp, request.body)
+
+        my_signature = 'v0={0}'.format(
+            hmac.new(slack_signing_secret, sig_basestring, hashlib.sha256).hexdigest()
+        )
+        if not hmac.compare_digest(my_signature, slack_signature):
+            return HttpResponse('invalid signature', status=401)
 
     token = fields.get('token')
     if token != os.environ['SLACK_TOKEN']:
