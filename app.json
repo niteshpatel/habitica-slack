@@ -23,8 +23,8 @@
     "SLACK_CHANNEL_ID": {
       "description": "Your Slack Channel ID (you can get this from the channel URL, e.g. for https://yourworkspace.slack.com/messages/C2M7P8H32/, channel id would be C2M7P8H32"
     },
-    "SLACK_TOKEN": {
-      "description": "Your Slack App Verification Token (found in your Slack App Credentials under https://api.slack.com/apps > <Your App>)."
+    "SLACK_SIGNING_SECRET": {
+      "description": "Your Slack App Signing Secret (found in your Slack App Credentials under https://api.slack.com/apps > <Your App>)."
     },
     "SLACK_WEBHOOK": {
       "description": "Your Slack App Incoming WebHook URL (found in your Slack App Incoming Webhooks under  https://api.slack.com/apps > <Your App> > Incoming Webhooks)."
