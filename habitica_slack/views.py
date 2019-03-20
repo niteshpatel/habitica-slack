@@ -28,10 +28,10 @@ def sync_message_to_habitica(request):
         )
         if not hmac.compare_digest(my_signature, slack_signature):
             return HttpResponse('invalid signature', status=401)
-
-    token = fields.get('token')
-    if token != os.environ['SLACK_TOKEN']:
-        return HttpResponse('invalid token', status=401)
+    else:
+        token = fields.get('token')
+        if token != os.environ['SLACK_TOKEN']:
+            return HttpResponse('invalid token', status=401)
 
     event = fields.get('event')
     if event:
