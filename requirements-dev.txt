@@ -1,0 +1,7 @@
+dj-database-url==0.4
+Django>=1.9.13
+psycopg2==2.7 --no-binary psycopg2
+whitenoise==3.2
+requests==2.20
+requests-mock==1.1
+mock==2.0
